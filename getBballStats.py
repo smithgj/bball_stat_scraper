@@ -1,3 +1,4 @@
+import sys
 import requests
 from bs4 import BeautifulSoup
 
@@ -26,15 +27,33 @@ for a in last_name_hrefs:
     #print(player_page_end_url)
     player_pages_urls.append(base_url + player_page_end_url)
 
+players = []
 for page in player_pages_urls:
-    print(page)
-    # go to each page
-    # get all player links and store in a list
+    # print(page)
+    player_page = requests.get(page)
+    player_list_soup = BeautifulSoup(player_page.content, 'html.parser')
+    all_anchors = player_list_soup.find('table', {'class':'data sortable'})
+    all_hrefs = all_anchors.find_all('a')
+    for b in all_hrefs:
+        page_end_url = b['href'].strip('.')
+        if "players" in page_end_url:
+            players.append(base_url + page_end_url)
+
+print('total number of players found = ' + str(len(players)))
+
+# debug to print out all urls of individual player pages
+#with open('player_pages.txt', 'w') as f:
+#    for i in players:
+#        print(i, file=f)
+
 
 # for each url in the players link list:
     # extract_data(url)
 
 #def extract_data(url):
     #get page
-    #extrat data
+    #if position player
+        #extract position data
+    #else
+        #extract pitcher data
     #put in db
