@@ -6,6 +6,10 @@ from bs4 import BeautifulSoup
 #url = "https://atl-02.statsplus.net/tlg/reports/news/html/players/player_36536.html"
 url = "https://atl-02.statsplus.net/tlg/reports/news/html/players/player_57423.html"
 
+player_id = re.search('https://atl-02.statsplus.net/tlg/reports/news/html/players/player_(.*).html', url)
+player_id = player_id.group(1)
+print(player_id)
+
 
 batter_page = requests.get(url)
 # print(page)
@@ -33,11 +37,12 @@ while not one_liner_list[i].startswith('#'):
     i = i + 1
 name = name.strip()
 # print(name)
+
+number=''
 for x in one_liner_list:
     if x.startswith("#"):
         number = x[1:]
 
-# print(number)
 
 age = one_liner_list[one_liner_list.index('AGE:') + 1]
 bats = one_liner_list[one_liner_list.index('BATS:') + 1]
@@ -147,3 +152,17 @@ print(avoidK_overall)
 print(avoidK_v_left)
 print(avoidK_v_right)
 print(avoidK_potential)
+
+print("Fielding")
+fielding_ratings = soup.find('td', string='Range:')
+# print(fielding_ratings)
+catcher_range_td = fielding_ratings.find_next('td')
+catcher_range = catcher_range_td.text
+infield_range_td = catcher_range_td.find_next('td')
+infield_range = infield_range_td.text
+outfield_range_td = infield_range_td.find_next('td')
+outfield_range = outfield_range_td.text
+
+print(catcher_range)
+print(infield_range)
+print(outfield_range)
