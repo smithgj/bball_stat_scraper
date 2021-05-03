@@ -49,6 +49,7 @@ print('total number of players found = ' + str(len(players)))
 
 # for each url in the players link list:
     # extract_data(url)
+    # persist_data()
 
 #def extract_data(url):
     #get page
@@ -56,4 +57,5 @@ print('total number of players found = ' + str(len(players)))
         #extract position data
     #else
         #extract pitcher data
-    #put in db
+
+#def persist_data()
