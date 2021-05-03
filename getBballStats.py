@@ -59,3 +59,7 @@ print('total number of players found = ' + str(len(players)))
         #extract pitcher data
 
 #def persist_data()
+
+#def extract_position_data()
+
+#def extract_pitching_data()
