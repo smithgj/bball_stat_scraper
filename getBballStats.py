@@ -2,6 +2,9 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+
+
+
 url = "https://atl-02.statsplus.net/tlg/reports/news/html/leagues/league_153_players.html"
 base_url = "https://atl-02.statsplus.net/tlg/reports/news/html"
 
@@ -51,6 +54,8 @@ print('total number of players found = ' + str(len(players)))
     # extract_data(url)
     # persist_data()
 
+
+
 #def extract_data(url):
     #get page
     #if position player
@@ -60,6 +65,6 @@ print('total number of players found = ' + str(len(players)))
 
 #def persist_data()
 
-#def extract_position_data()
+#def extract_position_data() - getBattingStats - separate file
 
-#def extract_pitching_data()
+#def extract_pitching_data() - getPitchingStats -separate file
