@@ -4,20 +4,11 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def get_batter_data():
+def get_batter_data(soup, player_id):
 
-
-    url = "https://atl-02.statsplus.net/tlg/reports/news/html/players/player_36536.html"
-     # url = "https://atl-02.statsplus.net/tlg/reports/news/html/players/player_57423.html"
-
-    player_id = re.search('https://atl-02.statsplus.net/tlg/reports/news/html/players/player_(.*).html', url)
-    player_id = player_id.group(1)
     batter_data = {
         "player_id" : player_id
     }
-
-    batter_page = requests.get(url)
-    soup = BeautifulSoup(batter_page.content, 'html.parser')
 
     team_name_pages = soup.find('a', {'class': 'boxlink'}, {'style': 'font-weight:bold'})
     team = team_name_pages['href']

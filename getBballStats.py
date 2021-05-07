@@ -1,6 +1,8 @@
 import sys
+import re
 import requests
 from bs4 import BeautifulSoup
+from getBattingStats import get_batter_data
 
 
 
@@ -50,20 +52,42 @@ print('total number of players found = ' + str(len(players)))
 #        print(i, file=f)
 
 
-# for each url in the players link list:
-    # extract_data(url)
-    # persist_data()
-
-
-
-#def extract_data(url):
+def extract_data(soup, player_id):
     #get page
     #if position player
         #extract position data
     #else
         #extract pitcher data
+    data_dict = get_batter_data(soup, player_id)
+    return(data_dict)
 
 #def persist_data()
+
+
+# for each url in the players link list:
+for player_url in players:
+    player_id = re.search('https://atl-02.statsplus.net/tlg/reports/news/html/players/player_(.*).html', player_url)
+    player_id = player_id.group(1)
+
+    page = requests.get(player_url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    one_liner = soup.find('th', {'colspan': '2'}, {'class': 'boxtitle'})
+    one_liner = one_liner.find('a')
+    one_liner = one_liner.text
+    # RF AARON 'ALL RISE' JUDGE #99 - AGE: 29 - BATS: R - THROWS: R - MORALE: VERY GOOD
+    # C TRENT JACKSON #5 - AGE: 21 - BATS: L - THROWS: R - MORALE: GOOD
+    # print(one_liner)
+    one_liner_list = one_liner.split()
+    pos = one_liner_list[0]
+    if pos != 'P':
+        player_dict = extract_data(soup, player_id)
+        # persist_data()
+        print(player_dict)
+    else:
+        print("must be a pitcher")
+
+
+
 
 #def extract_position_data() - getBattingStats - separate file
 
