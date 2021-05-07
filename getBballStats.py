@@ -52,15 +52,6 @@ print('total number of players found = ' + str(len(players)))
 #        print(i, file=f)
 
 
-def extract_data(soup, player_id):
-    #get page
-    #if position player
-        #extract position data
-    #else
-        #extract pitcher data
-    data_dict = get_batter_data(soup, player_id)
-    return(data_dict)
-
 #def persist_data()
 
 
@@ -80,15 +71,11 @@ for player_url in players:
     one_liner_list = one_liner.split()
     pos = one_liner_list[0]
     if pos != 'P':
-        player_dict = extract_data(soup, player_id)
+        player_dict = data_dict = get_batter_data(soup, player_id)
         # persist_data()
         print(player_dict)
     else:
         print("must be a pitcher")
-
-
-
-
-#def extract_position_data() - getBattingStats - separate file
-
-#def extract_pitching_data() - getPitchingStats -separate file
+        # player_dict = data_dict = get_pitcher_data(soup, player_id)
+        # persist_data()
+        # print(player_dict)
