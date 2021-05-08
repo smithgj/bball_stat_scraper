@@ -1,10 +1,13 @@
 import sys
 import re
 import requests
+import mysql.connector
+import time
+import datetime
 from bs4 import BeautifulSoup
 from getBattingStats import get_batter_data
-
-
+from getPitchingStats import get_pitcher_data
+from persistme import persist_player_data
 
 
 url = "https://atl-02.statsplus.net/tlg/reports/news/html/leagues/league_153_players.html"
@@ -51,8 +54,13 @@ print('total number of players found = ' + str(len(players)))
 #    for i in players:
 #        print(i, file=f)
 
-
-#def persist_data()
+mydb = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    password="bn7999hd",
+    database="smitty"
+)
+mycursor = mydb.cursor()
 
 
 # for each url in the players link list:
@@ -67,15 +75,16 @@ for player_url in players:
     one_liner = one_liner.text
     # RF AARON 'ALL RISE' JUDGE #99 - AGE: 29 - BATS: R - THROWS: R - MORALE: VERY GOOD
     # C TRENT JACKSON #5 - AGE: 21 - BATS: L - THROWS: R - MORALE: GOOD
-    # print(one_liner)
     one_liner_list = one_liner.split()
     pos = one_liner_list[0]
     if pos != 'P':
-        player_dict = data_dict = get_batter_data(soup, player_id)
-        # persist_data()
-        print(player_dict)
+        player_dict = get_batter_data(soup, player_id)
+        #persist_batter_data(player_dict, mydb, mycursor)
+        #persist_fielding_data(player_dict, mydb, mycursor)
+        persist_player_data(player_dict, mydb, mycursor)
     else:
-        print("must be a pitcher")
-        # player_dict = data_dict = get_pitcher_data(soup, player_id)
-        # persist_data()
-        # print(player_dict)
+        player_dict = get_pitcher_data(soup, player_id)
+        # persist_pitcher_data(player_dict, mydb, mycursor)
+        persist_player_data(player_dict, mydb, mycursor)
+
+

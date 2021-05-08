@@ -33,8 +33,8 @@ def get_batter_data(soup, player_id):
         i = i + 1
     name = name.strip()
     batter_data.update({
-        "position" : pos,
-        "player_name": name
+        'position' : pos,
+        'player_name': name
     })
 
     number = ''
