@@ -3,7 +3,7 @@ import re
 import requests
 import mysql.connector
 import time
-import datetime
+from datetime import datetime
 from bs4 import BeautifulSoup
 from getBattingStats import get_batter_data
 from getPitchingStats import get_pitcher_data
