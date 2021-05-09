@@ -50,7 +50,7 @@ def persist_player_data(player_dict, mydb, mycursor):
     try:
         mycursor.execute(sql, data)
         mydb.commit()
-        print(mycursor.rowcount, "record inserted.")
+        print(mycursor.rowcount, "table: player - record inserted.")
 
     except Exception as e:
         mydb.rollback()

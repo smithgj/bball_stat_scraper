@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from getBattingStats import get_batter_data
 from getPitchingStats import get_pitcher_data
 from persistme import persist_player_data
+from persist_batter import persist_batter_data
 
 
 url = "https://atl-02.statsplus.net/tlg/reports/news/html/leagues/league_153_players.html"
@@ -62,6 +63,14 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
+sql_trunc = ("TRUNCATE TABLE PLAYER")
+mycursor.execute(sql_trunc)
+sql_trunc = ("TRUNCATE TABLE BATTER_STATS")
+mycursor.execute(sql_trunc)
+sql_trunc = ("TRUNCATE TABLE FIELDING_STATS")
+mycursor.execute(sql_trunc)
+sql_trunc = ("TRUNCATE TABLE PITCHING_STATS")
+mycursor.execute(sql_trunc)
 
 # for each url in the players link list:
 for player_url in players:
@@ -79,7 +88,7 @@ for player_url in players:
     pos = one_liner_list[0]
     if pos != 'P':
         player_dict = get_batter_data(soup, player_id)
-        #persist_batter_data(player_dict, mydb, mycursor)
+        persist_batter_data(player_dict, mydb, mycursor)
         #persist_fielding_data(player_dict, mydb, mycursor)
         persist_player_data(player_dict, mydb, mycursor)
     else:

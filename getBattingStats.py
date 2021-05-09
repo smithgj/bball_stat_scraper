@@ -356,4 +356,5 @@ def get_batter_data(soup, player_id):
         "drafted": drafted
     })
 
+
     return batter_data
