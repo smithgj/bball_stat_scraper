@@ -9,6 +9,8 @@ from getBattingStats import get_batter_data
 from getPitchingStats import get_pitcher_data
 from persistme import persist_player_data
 from persist_batter import persist_batter_data
+from persistpitcher import persist_pitcher_data
+from persist_fielder import persist_fielding_data
 
 
 url = "https://atl-02.statsplus.net/tlg/reports/news/html/leagues/league_153_players.html"
@@ -88,12 +90,13 @@ for player_url in players:
     pos = one_liner_list[0]
     if pos != 'P':
         player_dict = get_batter_data(soup, player_id)
-        persist_batter_data(player_dict, mydb, mycursor)
-        #persist_fielding_data(player_dict, mydb, mycursor)
         persist_player_data(player_dict, mydb, mycursor)
+        persist_batter_data(player_dict, mydb, mycursor)
+        persist_fielding_data(player_dict, mydb, mycursor)
     else:
         player_dict = get_pitcher_data(soup, player_id)
-        # persist_pitcher_data(player_dict, mydb, mycursor)
         persist_player_data(player_dict, mydb, mycursor)
+        persist_pitcher_data(player_dict, mydb, mycursor)
+
 
 

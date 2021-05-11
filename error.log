@@ -1,1 +1,2 @@
-20210507_00:19:21 - failed to insert record
+20210511_02:15:04 - failed to insert record for 25758
+20210511_02:15:04 - 1366 (HY000): Incorrect integer value: '-' for column 'defense' at row 1
