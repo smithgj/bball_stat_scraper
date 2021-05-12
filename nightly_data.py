@@ -77,6 +77,8 @@ for player_url in players:
         team = team_name_pages['href']
         team = re.search('../teams/team_(.*).html', team)
         team = team.group(1)
+        if team =='':
+            team = 0
         batter.update({"team_id": team, "player_id":player_id,"date":today})
 
         stat_table = soup.find('table', attrs={'class':'data', 'width':'673px', 'style':'margin-bottom:5px;'})
@@ -148,6 +150,8 @@ for player_url in players:
         team = team_name_pages['href']
         team = re.search('../teams/team_(.*).html', team)
         team = team.group(1)
+        if team =='':
+            team = 0
         pitcher.update({"team_id": team, "player_id": player_id, "date": today})
 
         stat_table = soup.find('table', attrs={'class': 'data', 'width': '673px', 'style': 'margin-bottom:5px;'})
