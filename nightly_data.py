@@ -127,7 +127,6 @@ for player_url in players:
                 batter.get('k'), batter.get('avg'), batter.get('obp'), batter.get('slg'),
                 batter.get('sb'), batter.get('war'))
 
-        print(data)
         try:
             mycursor.execute(sql, data)
             mydb.commit()
@@ -143,77 +142,76 @@ for player_url in players:
                 logfile.write(sttime + str(e) + '\n')
 
 
-        if pos == 'P':
-            pitcher = {}
-            team_name_pages = soup.find('a', {'class': 'boxlink'}, {'style': 'font-weight:bold'})
-            team = team_name_pages['href']
-            team = re.search('../teams/team_(.*).html', team)
-            team = team.group(1)
-            pitcher.update({"team_id": team, "player_id": player_id, "date": today})
+    if pos == 'P':
+        pitcher = {}
+        team_name_pages = soup.find('a', {'class': 'boxlink'}, {'style': 'font-weight:bold'})
+        team = team_name_pages['href']
+        team = re.search('../teams/team_(.*).html', team)
+        team = team.group(1)
+        pitcher.update({"team_id": team, "player_id": player_id, "date": today})
 
-            stat_table = soup.find('table', attrs={'class': 'data', 'width': '673px', 'style': 'margin-bottom:5px;'})
-            first_row = stat_table.find("tr")
-            second_row = first_row.find_next("tr")
-            cells = second_row.findAll("td")
-            games = cells[0].text
-            games_started = cells[1].text
-            record = cells[2].text
-            saves = cells[3].text
-            era = cells[4].text
-            ip = cells[5].text
-            ha = cells[6].text
-            hr = cells[7].text
-            bb = cells[8].text
-            k = cells[9].text
-            whip = cells[10].text
-            war = cells[11].text
+        stat_table = soup.find('table', attrs={'class': 'data', 'width': '673px', 'style': 'margin-bottom:5px;'})
+        first_row = stat_table.find("tr")
+        second_row = first_row.find_next("tr")
+        cells = second_row.findAll("td")
+        games = cells[0].text
+        games_started = cells[1].text
+        record = cells[2].text
+        saves = cells[3].text
+        era = cells[4].text
+        ip = cells[5].text
+        ha = cells[6].text
+        hr = cells[7].text
+        bb = cells[8].text
+        k = cells[9].text
+        whip = cells[10].text
+        war = cells[11].text
 
-            record_str = record.split()
-            wins = record_str[0]
-            losses = record_str[2]
-            ############## change record to W and L
-            pitcher.update({
-                "games": games,
-                "games_started": games_started,
-                "wins": wins,
-                "losses": losses,
-                "saves": saves,
-                "era": era,
-                "ip": ip,
-                "ha": ha,
-                "hr": hr,
-                "bb": bb,
-                "k": k,
-                "whip": whip,
-                "war": war
-            })
+        record_str = record.split('-')
+        wins = record_str[0]
+        losses = record_str[1]
 
-            sql = (
-                "INSERT INTO pitcher_data (player_id, team_id, date, games, games_started, "
-                "wins, losses, saves, era, ip, ha, hr, bb, k, whip, war)"
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            )
+        pitcher.update({
+            "games": games,
+            "games_started": games_started,
+            "wins": wins,
+            "losses": losses,
+            "saves": saves,
+            "era": era,
+            "ip": ip,
+            "ha": ha,
+            "hr": hr,
+            "bb": bb,
+            "k": k,
+            "whip": whip,
+            "war": war
+        })
 
-            data = (pitcher.get('player_id'), pitcher.get('team_id'), pitcher.get('date'),
-                    pitcher.get('games'), pitcher.get('games_started'), pitcher.get('wins'), pitcher.get('losses'),
-                    pitcher.get('saves'), pitcher.get('era'), pitcher.get('ip'), pitcher.get('ha'),
-                    pitcher.get('hr'), pitcher.get('bb'), pitcher.get('k'), pitcher.get('whip'),
-                    pitcher.get('war'))
+        sql = (
+            "INSERT INTO pitcher_data (player_id, team_id, date, games, games_started, "
+            "wins, losses, saves, era, ip, ha, hr, bb, k, whip, war)"
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+         )
 
-            print(data)
-            try:
-                mycursor.execute(sql, data)
-                mydb.commit()
-                print(mycursor.rowcount, "table: pitcher_data - record inserted.")
+        data = (pitcher.get('player_id'), pitcher.get('team_id'), pitcher.get('date'),
+                pitcher.get('games'), pitcher.get('games_started'), pitcher.get('wins'), pitcher.get('losses'),
+                pitcher.get('saves'), pitcher.get('era'), pitcher.get('ip'), pitcher.get('ha'),
+                pitcher.get('hr'), pitcher.get('bb'), pitcher.get('k'), pitcher.get('whip'),
+                pitcher.get('war'))
 
-            except Exception as e:
-                mydb.rollback()
-                log = 'nightly_error' + today + '.log'
-                ts = time.time()
-                sttime = datetime.fromtimestamp(ts).strftime('%Y%m%d_%H:%M:%S - ')
-                with open(log, 'a') as logfile:
-                    logfile.write(sttime + "failed to insert record for " + pitcher.get('player_id') + '\n')
-                    logfile.write(sttime + str(e) + '\n')
+        try:
+            mycursor.execute(sql, data)
+            mydb.commit()
+            print(mycursor.rowcount, "table: pitcher_data - record inserted.")
+
+        except Exception as e:
+            mydb.rollback()
+            log = 'nightly_error' + today + '.log'
+            ts = time.time()
+            sttime = datetime.fromtimestamp(ts).strftime('%Y%m%d_%H:%M:%S - ')
+            with open(log, 'a') as logfile:
+                logfile.write(sttime + "failed to insert record for " + pitcher.get('player_id') + '\n')
+                logfile.write(sttime + str(e) + '\n')
 
 
 
