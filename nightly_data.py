@@ -132,7 +132,12 @@ for player_url in players:
         try:
             mycursor.execute(sql, data)
             mydb.commit()
-            print(mycursor.rowcount, "table: batter_data - record inserted.")
+            log = 'nightly' + today + '.log'
+            ts = time.time()
+            sttime = datetime.fromtimestamp(ts).strftime('%Y%m%d_%H:%M:%S - ')
+            with open(log, 'a') as logfile:
+                logfile.write(sttime + "inserted record for batter: " + batter.get('player_id') + '\n')
+
 
         except Exception as e:
             mydb.rollback()
@@ -206,7 +211,11 @@ for player_url in players:
         try:
             mycursor.execute(sql, data)
             mydb.commit()
-            print(mycursor.rowcount, "table: pitcher_data - record inserted.")
+            log = 'nightly' + today + '.log'
+            ts = time.time()
+            sttime = datetime.fromtimestamp(ts).strftime('%Y%m%d_%H:%M:%S - ')
+            with open(log, 'a') as logfile:
+                logfile.write(sttime + "inserted record for pitcher: " + pitcher.get('player_id') + '\n')
 
         except Exception as e:
             mydb.rollback()
