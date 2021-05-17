@@ -63,6 +63,10 @@ for player_url in players:
     player_id = player_id.group(1)
 
     page = requests.get(player_url)
+    print(page.status_code)
+    if page.status_code == 404:
+        continue
+
     soup = BeautifulSoup(page.content, 'html.parser')
     one_liner = soup.find('th', {'colspan': '2'}, {'class': 'boxtitle'})
     one_liner = one_liner.find('a')
